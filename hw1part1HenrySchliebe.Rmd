@@ -1,0 +1,85 @@
+---
+title: "Homework 1 - Henry Schliebe"
+output:
+  html_document:
+    df_print: paged
+---
+
+# Step 1
+```{r}
+library(MASS)
+data(Boston)
+str(Boston)
+```
+The Boston data set includes information about housing values in the suburbs of Boston. Each entry has 14 columns or attributes including crim (the per capita crime rate by town), rm (the average number of rooms per dwelling), and medv (the median value of owner occupied homes in /$1000s). Each observation/row represents a neighborhood in Boston. 
+
+# Step 2
+```{r}
+head(Boston, n=5)
+tail(Boston, n=2)
+Boston[5,]
+head(Boston[1], n=3)
+names(Boston)
+```
+
+# Step 3
+```{r}
+mean(Boston[,1])
+median(Boston[,1])
+range(Boston[,1])
+```
+
+# Step 4
+```{r}
+hist(Boston$crim, main="Per capita crime rate by neighborhood", xlab="Crime per capita", ylab="Frequency")
+```
+This histogram tells us that the vast majority of the neighborhoods have a crim value between 0 and 10 which is the per capita crime rate. This means that there is a very low crime rate in most of the towns in Boston (as most of these values arent even greater than 1).
+
+# Step 5
+```{r}
+cor(Boston$crim, Boston$medv)
+```
+This value tells us that there is a negative correlation between the two variables. The crime column could definitely be useful for predicting a median value. For example, as the crime rate goes up, the house values go down.
+
+# Step 6
+```{r}
+plot(Boston$medv~Boston$rm, main="House values vs number of rooms", xlab="Number of rooms", ylab="Median house values", col="blue", pch=5)
+cor(Boston$medv, Boston$rm)
+```
+This graph clearly shows a positive correlation between these two variables such that the median house values increase as the number of rooms increases.
+
+# Step 7
+```{r}
+is.factor(Boston$chas)
+plot(Boston$medv~Boston$chas)
+chasfac <- factor(Boston$chas)
+plot(Boston$medv~chasfac)
+```
+The second graph with the factored variable makes it looks a lot neater in the form of a box plot while the first graph is just a raw graph of the data. Chas is the Charles River dummy variable. Chas is 1 if the neighborhood bounds the river, 0 otherwise.
+
+# Step 8
+```{r}
+typeof(Boston$rad)
+summary(Boston$rad)
+unique(Boston$rad)
+sumrad <- sum(Boston$rad==24)
+percentage <- sumrad/nrow(Boston)*100
+percentage
+```
+Rad is of the integer type. Summary gives us the minimum, 1st quarter, median, mean, 3rd quarter and maximum values. Unique shows us every value of rad similar to distinct in sql queries. 26.09% of the neighborhoods have a rad value of 24.
+
+# Step 9
+```{r}
+far <- ifelse(Boston$rad==24, TRUE, FALSE)
+far <- factor(far)
+plot(Boston$medv~far, xlab="Far", ylab="Median House Value", main="Median House Values vs Far")
+```
+This plot shows us that most houses are cheaper in neighborhoods that are farther away from highways. 
+
+# Step 10
+```{r}
+summary(Boston[,c(1,6,13,14)])
+rowmaxmedv <- which.max(Boston[,14])
+str(Boston[rowmaxmedv,c(1,6,13,14)])
+```
+The most expensive neighborhood in Boston also has the lowest lstat variable, meaning the people living in the most expensive houses are also of high status. The crime isn't lowest in the most expensive neighborhood but its still pretty low. The most expensive houses also have a high number of rooms. 
